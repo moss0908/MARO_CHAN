@@ -11,6 +11,8 @@ load_dotenv(dotenv_path)
 TOKEN = os.environ.get("TOKEN")
 GUILD_ID = os.environ.get("GUILD_ID")
 TALK_CHANNEL_ID = os.environ.get("TALK_CHANNEL_ID")
+
+#API_KEY
 OPENAI_APIKEY = os.environ.get("OPENAI_APIKEY")
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 SEARCH_ENGINE_ID = os.environ.get("SEARCH_ENGINE_ID")

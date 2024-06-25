@@ -156,6 +156,9 @@ class RecruitEditModal(discord.ui.Modal):
             new_embed.set_field_at(3, name='■備考欄',value=f'{self.notice.value}',inline=False)
         
         await interaction.message.edit(embed=new_embed)
+        #メッセージ更新
+        member_text = new_embed.fields[4].value
+        await interaction.followup.send(f'{member_text} \n 募集内容を編集したよ！内容を確認してね～')
 
 #Recruitコマンド用Utilクラス
 class RecrUtil():
