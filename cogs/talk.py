@@ -91,7 +91,7 @@ class MARO_Talk(commands.Cog):
             else:
                 definitions_str2 = ""
             history_settings = "\n\nまた、彼女は過去に以下の内容の会話をしている。\n\n" + document
-            naming_settings = "\n\nまた、彼女はUserの事を『" + message.author.global_name + "』と呼び、名前の後に「くん」や「さん」をつける。\n"
+            naming_settings = "\n\nまた、彼女はUserの事を『" + message.author.display_name + "』と呼び、名前の後に「くん」や「さん」をつける。\n"
             system_settings = TalkUtil.CHARA_SETTING() + definitions_str2 + history_settings + naming_settings + "\n上記の注意点を守り、上記の発言例と資料を参考にして、春麿ちゃんの性格や口調、言葉の作り方を模倣し、回答を構築せよ。"
             
             #メッセージ生成
