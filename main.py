@@ -11,7 +11,8 @@ EXTENSIONS = [
     'cogs.teach',
     'cogs.poke',
     'cogs.mstr',
-    'cogs.splat'
+    'cogs.splat',
+    'cogs.dama'
 ]
 EXTENSIONS_DEBUG = [
     'cogs.debug.clear'
@@ -39,7 +40,7 @@ class MyBot(commands.Bot):
 
     async def on_ready(self):
         print("Connected!")
-        await bot.change_presence(activity=discord.Game(name="テング ビーフジャーキー", type=1))
+        await bot.change_presence(activity=discord.Game(name="お屠蘇", type=1))
         return
 
 #BOT実行
