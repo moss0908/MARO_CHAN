@@ -11,9 +11,10 @@ import settings
 #コンフィグ設定
 DATA_DIR = './talkdata/'
 openai.api_key = settings.OPENAI_APIKEY
-OPENAI_MODEL = "gpt-4o"
+OPENAI_MODEL = "o4-mini-2025-04-16"
+MAX_TOKENS = 2000  # 最大トークン数
 
-encoding: Encoding = tiktoken.encoding_for_model("gpt-4o-")
+encoding: Encoding = tiktoken.encoding_for_model("o4-mini-2025-04-16")
 
 #AIクライアント
 class AsyncOpenAIClient:
@@ -137,7 +138,7 @@ class MARO_Talk(commands.Cog):
                 functions=TalkUtil.func_googleSearch(),
                 function_call="auto",
                 temperature=1.0,
-                max_tokens=200,
+                max_tokens=MAX_TOKENS,
               )
 
               #わからなかった場合、Googleで検索する
@@ -182,7 +183,7 @@ class MARO_Talk(commands.Cog):
                         "role":
                         "user",
                         "content":
-                        "以下の要点を30字以内でまとめろ。[ユーザー「" + messagelog + "」春麿ちゃん「" + reply + "」]"
+                        "以下の要点を100字以内でまとめろ。[ユーザー「" + messagelog + "」春麿ちゃん「" + reply + "」]"
                     },
                 ],
                 temperature=0.0,

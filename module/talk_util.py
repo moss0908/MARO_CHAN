@@ -7,9 +7,9 @@ import settings
 
 #定義
 GUILD_ID = settings.GUILD_ID
-LOG_COUNT = 5
-REPLY_LIMIT = 50
-IMAGE_LIMIT = 5
+LOG_COUNT = 10
+REPLY_LIMIT = 100
+IMAGE_LIMIT = 10
 
 CHARA_PROMPT = """
 春麿ちゃんという少女との対話シミュレーションを行う。
