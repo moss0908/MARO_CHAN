@@ -14,7 +14,7 @@ openai.api_key = settings.OPENAI_APIKEY
 OPENAI_MODEL = "o4-mini-2025-04-16"
 MAX_TOKENS = 2000  # 最大トークン数
 
-encoding: Encoding = tiktoken.encoding_for_model("o4-mini-2025-04-16")
+encoding: Encoding = tiktoken.encoding_for_model("gpt-4o")
 
 #AIクライアント
 class AsyncOpenAIClient:
