@@ -12,6 +12,7 @@ import settings
 DATA_DIR = './talkdata/'
 openai.api_key = settings.OPENAI_APIKEY
 OPENAI_MODEL = "gpt-4o-search-preview"
+OPENAI_MODEL_IMAGE = "o4-mini-2025-04-16" # 画像入力可能モデル
 MAX_TOKENS = 2000  # 最大トークン数
 
 encoding: Encoding = tiktoken.encoding_for_model("gpt-4o")
@@ -32,13 +33,13 @@ class AsyncOpenAIClient:
     return "\n".join(formatted_messages)
 
   #返信作成
-  async def chat_completion(self, messages):
+  async def chat_completion(self, model, messages):
     headers = {
       "Authorization": f"Bearer {self.api_key}",
       "Content-Type": "application/json",
     }
     data = {
-      "model": OPENAI_MODEL,
+      "model": model,
       "messages": messages,
       "max_completion_tokens": MAX_TOKENS
     }
@@ -94,6 +95,7 @@ class MARO_Talk(commands.Cog):
             #メッセージ生成
             if len(message.attachments) > 0:
               response = await self.async_openai_client.chat_completion(
+                model=OPENAI_MODEL_IMAGE,
                 messages=[
                   {
                         "role": "system",
@@ -148,6 +150,7 @@ class MARO_Talk(commands.Cog):
 
             #ログ出力
             response2 = await self.async_openai_client.chat_completion(
+                model=OPENAI_MODEL,
                 messages=[
                     {
                         "role":
