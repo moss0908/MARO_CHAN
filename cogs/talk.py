@@ -121,7 +121,7 @@ class MARO_Talk(commands.Cog):
                     },
                 ],
                 temperature=1.0,
-                maxtokens=MAX_TOKENS,
+                max_completion_tokens=MAX_TOKENS,
               )
             else:
               response = openai.ChatCompletion.create(
@@ -139,7 +139,7 @@ class MARO_Talk(commands.Cog):
                 functions=TalkUtil.func_googleSearch(),
                 function_call="auto",
                 temperature=1.0,
-                max_tokens=MAX_TOKENS,
+                max_completion_tokens=MAX_TOKENS,
               )
 
               #わからなかった場合、Googleで検索する
