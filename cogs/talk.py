@@ -13,7 +13,7 @@ DATA_DIR = './talkdata/'
 openai.api_key = settings.OPENAI_APIKEY
 OPENAI_MODEL = "gpt-4o-search-preview"
 OPENAI_MODEL_IMAGE = "o4-mini-2025-04-16" # 画像入力可能モデル
-MAX_TOKENS = 2000  # 最大トークン数
+MAX_TOKENS = 500  # 最大トークン数
 
 encoding: Encoding = tiktoken.encoding_for_model("gpt-4o")
 
