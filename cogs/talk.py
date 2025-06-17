@@ -40,10 +40,7 @@ class AsyncOpenAIClient:
     data = {
       "model": OPENAI_MODEL,
       "messages": messages,
-      "max_completion_tokens": MAX_TOKENS,
-      "top_p": 0.95,
-      "frequency_penalty": 0.3,
-      "presence_penalty": 0.3,
+      "max_completion_tokens": MAX_TOKENS
     }
     async with aiohttp.ClientSession(headers=headers) as session:
       async with session.post(self.endpoint, json=data) as response:
