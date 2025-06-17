@@ -43,9 +43,9 @@ class AsyncOpenAIClient:
       "messages": messages,
       "temperature": temperature,
       "max_completion_tokens": maxtokens,
-      "top_p": 1,
-      "frequency_penalty": 0,
-      "presence_penalty": 0,
+      "top_p": 0.95,
+      "frequency_penalty": 0.3,
+      "presence_penalty": 0.3,
     }
     async with aiohttp.ClientSession(headers=headers) as session:
       async with session.post(self.endpoint, json=data) as response:
@@ -168,7 +168,7 @@ class MARO_Talk(commands.Cog):
                         },
                     ],
                     temperature=1.0,
-                    maxtokens=MAX_LOG_TOKENS,
+                    max_completion_tokens=MAX_LOG_TOKENS,
                   )
 
             reply = response['choices'][0]['message']['content'].replace('「', '').replace('」', '')
@@ -187,8 +187,8 @@ class MARO_Talk(commands.Cog):
                         "以下の要点を100字以内でまとめろ。[ユーザー「" + messagelog + "」春麿ちゃん「" + reply + "」]"
                     },
                 ],
-                temperature=0.0,
-                maxtokens=MAX_LOG_TOKENS,
+                temperature=1.0,
+                max_completion_tokens=MAX_LOG_TOKENS,
             )
             logstr = response2['choices'][0]['message']['content'].replace('\n', '').replace('」', '').replace('「', '')
             await TalkUtil.log(yourfile,TalkUtil.truncate_string(logstr))
