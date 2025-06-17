@@ -11,9 +11,8 @@ import settings
 #コンフィグ設定
 DATA_DIR = './talkdata/'
 openai.api_key = settings.OPENAI_APIKEY
-OPENAI_MODEL = "o4-mini-2025-04-16"
+OPENAI_MODEL = "gpt-4o-search-preview"
 MAX_TOKENS = 2000  # 最大トークン数
-MAX_LOG_TOKENS = 200  # 最大トークン数(ログ)
 
 encoding: Encoding = tiktoken.encoding_for_model("gpt-4o")
 
@@ -33,7 +32,7 @@ class AsyncOpenAIClient:
     return "\n".join(formatted_messages)
 
   #返信作成
-  async def chat_completion(self, messages, temperature, maxtokens):
+  async def chat_completion(self, messages, temperature):
     headers = {
       "Authorization": f"Bearer {self.api_key}",
       "Content-Type": "application/json",
@@ -42,7 +41,7 @@ class AsyncOpenAIClient:
       "model": OPENAI_MODEL,
       "messages": messages,
       "temperature": temperature,
-      "max_completion_tokens": maxtokens,
+      "max_completion_tokens": MAX_TOKENS,
       "top_p": 0.95,
       "frequency_penalty": 0.3,
       "presence_penalty": 0.3,
@@ -121,7 +120,15 @@ class MARO_Talk(commands.Cog):
                     },
                 ],
                 temperature=1.0,
-                max_completion_tokens=MAX_TOKENS,
+                web_search_options={
+                    "search_context_size": "low",  # 検索深度
+                    "user_location": {
+                        "type": "approximate",
+                        "approximate": {
+                            "country": "JP",  # 地域
+                        },
+                    },
+                }
               )
             else:
               response = openai.ChatCompletion.create(
@@ -136,40 +143,17 @@ class MARO_Talk(commands.Cog):
                     'content': "ユーザーが「" + messagelog + "」と言うと、春麿ちゃんはこう返した。"
                   },
                 ],
-                functions=TalkUtil.func_googleSearch(),
-                function_call="auto",
                 temperature=1.0,
-                max_completion_tokens=MAX_TOKENS,
+                web_search_options={
+                    "search_context_size": "low",  # 検索深度
+                    "user_location": {
+                        "type": "approximate",
+                        "approximate": {
+                            "country": "JP",  # 地域
+                        },
+                    },
+                }
               )
-
-              #わからなかった場合、Googleで検索する
-              res_msg = response['choices'][0]['message']
-              if res_msg.get("function_call") and res_msg["function_call"]["name"] == "searchGoogle":
-                # Google検索の場合
-                args = json.loads(res_msg["function_call"]["arguments"])
-                search_res = await TalkUtil.search_by_google(args["keyword"])
-                if search_res:
-                  definitions_str2 = "なお、以下に追加情報を示す。\n" + definitions_str
-
-                  response = await self.async_openai_client.chat_completion(
-                    messages=[
-                        {
-                          "role": "system",
-                          "content": system_settings
-                        },
-                        {
-                          "role": "function",
-                          "content": json.dumps(search_res),
-                          "name": "searchGoogle",
-                        },
-                        {
-                          "role": "user",
-                          'content': "ユーザーが「" + messagelog + "」と言うと、春麿ちゃんはこう返した。"
-                        },
-                    ],
-                    temperature=1.0,
-                    max_completion_tokens=MAX_LOG_TOKENS,
-                  )
 
             reply = response['choices'][0]['message']['content'].replace('「', '').replace('」', '')
             await message.reply(reply)
@@ -187,8 +171,7 @@ class MARO_Talk(commands.Cog):
                         "以下の要点を100字以内でまとめろ。[ユーザー「" + messagelog + "」春麿ちゃん「" + reply + "」]"
                     },
                 ],
-                temperature=1.0,
-                max_completion_tokens=MAX_LOG_TOKENS,
+                temperature=1.0
             )
             logstr = response2['choices'][0]['message']['content'].replace('\n', '').replace('」', '').replace('「', '')
             await TalkUtil.log(yourfile,TalkUtil.truncate_string(logstr))
