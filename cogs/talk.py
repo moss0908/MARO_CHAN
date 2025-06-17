@@ -13,6 +13,7 @@ DATA_DIR = './talkdata/'
 openai.api_key = settings.OPENAI_APIKEY
 OPENAI_MODEL = "o4-mini-2025-04-16"
 MAX_TOKENS = 2000  # 最大トークン数
+MAX_LOG_TOKENS = 200  # 最大トークン数(ログ)
 
 encoding: Encoding = tiktoken.encoding_for_model("gpt-4o")
 
@@ -41,7 +42,7 @@ class AsyncOpenAIClient:
       "model": OPENAI_MODEL,
       "messages": messages,
       "temperature": temperature,
-      "max_tokens": maxtokens,
+      "max_completion_tokens": maxtokens,
       "top_p": 1,
       "frequency_penalty": 0,
       "presence_penalty": 0,
@@ -120,7 +121,7 @@ class MARO_Talk(commands.Cog):
                     },
                 ],
                 temperature=1.0,
-                maxtokens=200,
+                maxtokens=MAX_TOKENS,
               )
             else:
               response = openai.ChatCompletion.create(
@@ -167,7 +168,7 @@ class MARO_Talk(commands.Cog):
                         },
                     ],
                     temperature=1.0,
-                    maxtokens=200,
+                    maxtokens=MAX_LOG_TOKENS,
                   )
 
             reply = response['choices'][0]['message']['content'].replace('「', '').replace('」', '')
@@ -187,7 +188,7 @@ class MARO_Talk(commands.Cog):
                     },
                 ],
                 temperature=0.0,
-                maxtokens=100,
+                maxtokens=MAX_LOG_TOKENS,
             )
             logstr = response2['choices'][0]['message']['content'].replace('\n', '').replace('」', '').replace('「', '')
             await TalkUtil.log(yourfile,TalkUtil.truncate_string(logstr))
