@@ -114,16 +114,7 @@ class MARO_Talk(commands.Cog):
                             },
                         ]
                     },
-                ],
-                web_search_options={
-                    "search_context_size": "low",  # 検索深度
-                    "user_location": {
-                        "type": "approximate",
-                        "approximate": {
-                            "country": "JP",  # 地域
-                        },
-                    },
-                }
+                ]
               )
             else:
               response = openai.ChatCompletion.create(
