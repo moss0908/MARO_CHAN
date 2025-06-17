@@ -121,7 +121,7 @@ class MARO_Talk(commands.Cog):
                     },
                 ],
                 temperature=1.0,
-                max_completion_tokens=MAX_TOKENS,
+                maxtokens=MAX_TOKENS,
               )
             else:
               response = openai.ChatCompletion.create(
@@ -139,7 +139,7 @@ class MARO_Talk(commands.Cog):
                 functions=TalkUtil.func_googleSearch(),
                 function_call="auto",
                 temperature=1.0,
-                max_completion_tokens=MAX_TOKENS,
+                maxtokens=MAX_TOKENS,
               )
 
               #わからなかった場合、Googleで検索する
@@ -168,7 +168,7 @@ class MARO_Talk(commands.Cog):
                         },
                     ],
                     temperature=1.0,
-                    max_completion_tokens=MAX_LOG_TOKENS,
+                    maxtokens=MAX_LOG_TOKENS,
                   )
 
             reply = response['choices'][0]['message']['content'].replace('「', '').replace('」', '')
@@ -188,7 +188,7 @@ class MARO_Talk(commands.Cog):
                     },
                 ],
                 temperature=1.0,
-                max_completion_tokens=MAX_LOG_TOKENS,
+                maxtokens=MAX_LOG_TOKENS,
             )
             logstr = response2['choices'][0]['message']['content'].replace('\n', '').replace('」', '').replace('「', '')
             await TalkUtil.log(yourfile,TalkUtil.truncate_string(logstr))
