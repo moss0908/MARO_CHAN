@@ -32,7 +32,7 @@ class AsyncOpenAIClient:
     return "\n".join(formatted_messages)
 
   #返信作成
-  async def chat_completion(self, messages, temperature):
+  async def chat_completion(self, messages):
     headers = {
       "Authorization": f"Bearer {self.api_key}",
       "Content-Type": "application/json",
@@ -40,7 +40,6 @@ class AsyncOpenAIClient:
     data = {
       "model": OPENAI_MODEL,
       "messages": messages,
-      "temperature": temperature,
       "max_completion_tokens": MAX_TOKENS,
       "top_p": 0.95,
       "frequency_penalty": 0.3,
@@ -119,7 +118,6 @@ class MARO_Talk(commands.Cog):
                         ]
                     },
                 ],
-                temperature=1.0,
                 web_search_options={
                     "search_context_size": "low",  # 検索深度
                     "user_location": {
@@ -143,7 +141,6 @@ class MARO_Talk(commands.Cog):
                     'content': "ユーザーが「" + messagelog + "」と言うと、春麿ちゃんはこう返した。"
                   },
                 ],
-                temperature=1.0,
                 web_search_options={
                     "search_context_size": "low",  # 検索深度
                     "user_location": {
@@ -170,8 +167,7 @@ class MARO_Talk(commands.Cog):
                         "content":
                         "以下の要点を100字以内でまとめろ。[ユーザー「" + messagelog + "」春麿ちゃん「" + reply + "」]"
                     },
-                ],
-                temperature=1.0
+                ]
             )
             logstr = response2['choices'][0]['message']['content'].replace('\n', '').replace('」', '').replace('「', '')
             await TalkUtil.log(yourfile,TalkUtil.truncate_string(logstr))
