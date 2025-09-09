@@ -7,6 +7,7 @@ EXTENSIONS = [
     'cogs.recruit',
     'cogs.buki',
     'cogs.imgtxt',
+    'cogs.reverse',
     'cogs.talk',
     'cogs.teach',
     'cogs.poke',
@@ -36,7 +37,6 @@ class MyBot(commands.Bot):
 
     async def close(self):
         await super().close()
-        await self.session.close()
 
     async def on_ready(self):
         print("Connected!")
