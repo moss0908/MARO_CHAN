@@ -28,6 +28,19 @@ class YouTube(commands.Cog):
             ffmpeg_loc = getattr(settings, 'FFMPEG_PATH', None)
 
             
+            # 動画メタ取得（長さチェック）
+            try:
+                loop = asyncio.get_event_loop()
+                info = await loop.run_in_executor(None, lambda: YoutubeDL({'quiet': True, 'no_warnings': True}).extract_info(url, download=False))
+                duration = info.get('duration') or 0
+            except Exception:
+                duration = 0
+
+            # 15分(900秒)を超える動画は拒否
+            if duration and duration > 900:
+                await interaction.followup.send('長すぎ！！短くして！！(※15分以下にしてください。)', ephemeral=True)
+                return
+
             preferred_quality = '192'
             ydl_opts = {
                 'format': 'bestaudio/best',
@@ -91,13 +104,13 @@ class YouTube(commands.Cog):
                     # 収まらなければ次のqualityで再試行
 
                 if selected_path is None:
-                    await interaction.followup.send('生成されたmp3が大きすぎるよ！（>8MB）', ephemeral=not public)
+                    await interaction.followup.send('生成されたmp3が大きすぎるよ！（>8MB）', ephemeral=True)
                     return
 
                 await interaction.followup.send(file=discord.File(selected_path), ephemeral=not public)
 
             except Exception as e:
-                await interaction.followup.send(f'エラーが発生しました: {e}', ephemeral=not public)
+                await interaction.followup.send(f'エラーが発生しました: {e}', ephemeral=True)
 
 
 async def setup(bot: commands.Bot):
