@@ -33,6 +33,7 @@ class Reverse(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print('Successfully loaded : Reverse')
+        print("sync")
 
     # テキストまたは画像を逆転
     @app_commands.guilds(int(settings.GUILD_ID))

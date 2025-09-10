@@ -12,6 +12,7 @@ EXTENSIONS = [
     'cogs.teach',
     'cogs.poke',
     'cogs.mstr',
+    'cogs.youtube',
     'cogs.splat',
     'cogs.dama'
 ]
